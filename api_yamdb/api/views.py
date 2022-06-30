@@ -2,7 +2,6 @@ from uuid import uuid4
 
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
@@ -11,7 +10,6 @@ from rest_framework.permissions import (AllowAny, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from reviews.models import Categories, Genre, Review, Title
 from users.models import CustomUser
 
@@ -39,8 +37,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
-        new_queryset = title.review_title.all()
-        return new_queryset
+        return title.review_title.all()
 
     def perform_create(self, serializer):
         title = get_object_or_404(Title, id=self.kwargs.get('title_id'))
@@ -67,8 +64,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         review = get_object_or_404(Review, id=self.kwargs.get('review_id'),
                                    title=self.kwargs.get('title_id'))
-        queryset = review.comment_review.all()
-        return queryset
+        return review.comment_review.all()
 
     def perform_create(self, serializer):
         review = get_object_or_404(Review, id=self.kwargs.get('review_id'),
