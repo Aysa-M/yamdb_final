@@ -59,7 +59,7 @@ jobs:
             Ошибка на этапе сборки и пуша образа DockerHub  - ${{ github.repository }}
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
   deploy:
-    name: Deploy the yamdb_final
+    name: Deploy the yamdb_final to the VM.
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
     steps:
