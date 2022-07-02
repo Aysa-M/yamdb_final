@@ -56,7 +56,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            Ошибка на этапе сборки и пуша образа DockerHub  - ${{ github.repository }}
+            Ошибка в сборке и пуше образа DockerHub  - ${{ github.repository }}
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
   deploy:
     name: Deploy the yamdb_final to the VM.
