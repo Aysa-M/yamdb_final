@@ -27,7 +27,7 @@ jobs:
         message: |
           ${{ steps.run_test.outcome }}
           ${{ steps.run_test.conclusion }}
-          Ошибка при тестировании - ${{ github.repository }}
+          Error during the tests - ${{ github.repository }}
           https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
