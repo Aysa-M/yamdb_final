@@ -1,4 +1,4 @@
-![STATUS](https://github.com/Aysa-M/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+![WORKFLOW_STATUS](https://github.com/Aysa-M/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 # ***Групповой проект. Спринт 10. Яндекс.Практикум.***
 ## **Описание проекта API для YaMDB.**
