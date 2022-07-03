@@ -62,7 +62,7 @@ jobs:
     name: Deploy the yamdb_final
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     steps:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -82,11 +82,13 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker-compose up -d 
-              sudo docker-compose exec -T web python manage.py makemigrations users --noinput 
-              sudo docker-compose exec -T web python manage.py makemigrations reviews --noinput 
-              sudo docker-compose exec -T web python manage.py migrate --noinput 
-              sudo docker-compose exec -T web python manage.py collectstatic --noinput
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker run --rm -d -p 8000:8000 nanice/yamdb_final:latest 
+            sudo docker-compose up -d
+            sudo docker-compose exec -T web python manage.py makemigrations users --noinput
+            sudo docker-compose exec -T web python manage.py makemigrations reviews --noinput
+            sudo docker-compose exec -T web python manage.py migrate --noinput
+            sudo docker-compose exec -T web python manage.py collectstatic --noinput
       - name: Send message if deploy failed
         if: ${{ failure() }}
         uses: appleboy/telegram-action@master
