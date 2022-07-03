@@ -1,5 +1,5 @@
 name: API_YamDB workflow
-on: [push]
+on: push: branches: main
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -56,12 +56,13 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            Ошибка на этапе сборки и пуша образа DockerHub  - ${{ github.repository }}
+            Error while building ang pushing image to DockerHub  - ${{ github.repository }}
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
   deploy:
     name: Deploy the yamdb_final
     runs-on: ubuntu-latest
     needs: build_and_push_to_docker_hub
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -81,6 +82,7 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             sudo docker-compose up -d
+            sudo docker-compose exec -T web python manage.py collectstatic --noinput
       - name: Send message if deploy failed
         if: ${{ failure() }}
         uses: appleboy/telegram-action@master
@@ -88,7 +90,7 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-            Ошибка в сборке и пуше образа DockerHub  - ${{ github.repository }}
+            Error with deploy process - ${{ github.repository }}
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
   send_message:
     runs-on: ubuntu-latest
